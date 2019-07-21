@@ -39,7 +39,7 @@ training_sess = None
 class MyMlpPolicy(FeedForwardPolicy):
 
     def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse=False, **_kwargs):
-        super(MyMlpPolicy, self).__init__(sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse, net_arch=[{"pi":arch, "vf":arch}],
+        super(MyMlpPolicy, self).__init__(sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse, net_arch=[{"pi":arch, "vf":arch}],act_fun=tf.nn.relu,
                                         feature_extraction="mlp", **_kwargs)
         global training_sess
         training_sess = sess
@@ -60,7 +60,7 @@ for i in range(0, 6):
 ##
 #   Save the model to the location specified below.
 ##
-default_export_dir = "/tmp/pcc_saved_models/model_A/"
+default_export_dir = "/tmp/pcc_saved_models/model_relu/"
 export_dir = arg_or_default("--model-dir", default=default_export_dir)
 with model.graph.as_default():
 
@@ -87,4 +87,4 @@ with model.graph.as_default():
         tags=[tf.saved_model.tag_constants.SERVING],
         signature_def_map=signature_map,
         clear_devices=True)
-    model_builder.save(as_text=True)
+    model_builder.save(as_text=False)
